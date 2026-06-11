@@ -1,0 +1,75 @@
+{
+  "app": {
+    "title": "Voice Trainer",
+    "description": "女性のような声を練習するPWA"
+  },
+  "nav": {
+    "settings": "設定",
+    "practice": "練習",
+    "history": "履歴"
+  },
+  "settings": {
+    "title": "ボイスタイプ設定",
+    "subtitle": "3つの軸から練習目標を選んでください",
+    "pitchAxis": "音域タイプ",
+    "qualityAxis": "声質タイプ",
+    "intonationAxis": "イントネーション",
+    "startPractice": "練習を始める"
+  },
+  "pitchTypes": {
+    "deepAlto": "ディープアルト",
+    "alto": "アルト",
+    "middle": "ミドル",
+    "soprano": "ソプラノ"
+  },
+  "qualityTypes": {
+    "deepSoft": "ディープソフト",
+    "soft": "ソフト",
+    "clear": "クリア",
+    "bright": "ブライト"
+  },
+  "intonationTypes": {
+    "flat": "フラット",
+    "calm": "カーム",
+    "natural": "ナチュラル",
+    "active": "アクティブ"
+  },
+  "practice": {
+    "title": "練習",
+    "subtitle": "マイクボタンを押して録音してください",
+    "recording": "録音中…",
+    "tapToStart": "タップして録音開始",
+    "tapToStop": "タップして録音停止",
+    "analyzing": "解析中…",
+    "micError": "マイクへのアクセスが拒否されました",
+    "needSettings": "先にボイスタイプを設定してください"
+  },
+  "result": {
+    "title": "結果",
+    "totalScore": "総合スコア",
+    "retry": "もう一度練習",
+    "saveAndHistory": "保存して履歴へ",
+    "f0": "F0（ピッチ）",
+    "formantF1": "フォルマント F1",
+    "formantF2": "フォルマント F2",
+    "formantNote": "参考値（ブラウザFFTの近似）",
+    "spectralCentroid": "スペクトル重心",
+    "hnr": "HNR（息）",
+    "intonation": "イントネーション",
+    "measured": "計測値",
+    "target": "目標"
+  },
+  "history": {
+    "title": "練習履歴",
+    "empty": "まだ練習記録がありません",
+    "scoreChart": "総合スコアの推移",
+    "clearAll": "履歴をすべて削除",
+    "confirmClear": "すべての履歴を削除しますか？"
+  },
+  "common": {
+    "points": "点",
+    "hz": "Hz",
+    "db": "dB",
+    "oct": "oct"
+  }
+}

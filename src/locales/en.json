@@ -1,0 +1,75 @@
+{
+  "app": {
+    "title": "Voice Trainer",
+    "description": "PWA for voice feminization practice"
+  },
+  "nav": {
+    "settings": "Settings",
+    "practice": "Practice",
+    "history": "History"
+  },
+  "settings": {
+    "title": "Voice Type Settings",
+    "subtitle": "Choose your practice targets across three axes",
+    "pitchAxis": "Pitch range",
+    "qualityAxis": "Voice quality",
+    "intonationAxis": "Intonation",
+    "startPractice": "Start practice"
+  },
+  "pitchTypes": {
+    "deepAlto": "Deep Alto",
+    "alto": "Alto",
+    "middle": "Middle",
+    "soprano": "Soprano"
+  },
+  "qualityTypes": {
+    "deepSoft": "Deep Soft",
+    "soft": "Soft",
+    "clear": "Clear",
+    "bright": "Bright"
+  },
+  "intonationTypes": {
+    "flat": "Flat",
+    "calm": "Calm",
+    "natural": "Natural",
+    "active": "Active"
+  },
+  "practice": {
+    "title": "Practice",
+    "subtitle": "Tap the mic button to record your voice",
+    "recording": "Recording…",
+    "tapToStart": "Tap to start recording",
+    "tapToStop": "Tap to stop recording",
+    "analyzing": "Analyzing…",
+    "micError": "Microphone access was denied",
+    "needSettings": "Please configure your voice type first"
+  },
+  "result": {
+    "title": "Results",
+    "totalScore": "Overall score",
+    "retry": "Practice again",
+    "saveAndHistory": "Save & view history",
+    "f0": "F0 (pitch)",
+    "formantF1": "Formant F1",
+    "formantF2": "Formant F2",
+    "formantNote": "Reference only (browser FFT approximation)",
+    "spectralCentroid": "Spectral centroid",
+    "hnr": "HNR (breathiness)",
+    "intonation": "Intonation",
+    "measured": "Measured",
+    "target": "Target"
+  },
+  "history": {
+    "title": "Practice history",
+    "empty": "No practice sessions yet",
+    "scoreChart": "Overall score trend",
+    "clearAll": "Clear all history",
+    "confirmClear": "Delete all history?"
+  },
+  "common": {
+    "points": "pts",
+    "hz": "Hz",
+    "db": "dB",
+    "oct": "oct"
+  }
+}
