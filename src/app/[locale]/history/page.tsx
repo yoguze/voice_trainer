@@ -44,7 +44,7 @@ export default function HistoryPage() {
               <h2 className="mb-3 text-lg font-semibold text-slate-700">
                 {t("scoreChart")}
               </h2>
-              <HistoryChart sessions={sessions} scoreLabel={t("scoreChart")} />
+              <HistoryChart sessions={sessions} />
             </motion.div>
           ) : null}
 

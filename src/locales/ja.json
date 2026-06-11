@@ -62,7 +62,18 @@
   "history": {
     "title": "練習履歴",
     "empty": "まだ練習記録がありません",
-    "scoreChart": "総合スコアの推移",
+    "scoreChart": "スコアの推移",
+    "chartMetric": "表示する指標",
+    "scoreUnit": "点",
+    "metrics": {
+      "total": "総合",
+      "all": "すべて",
+      "f0": "F0",
+      "formant": "フォルマント",
+      "spectralCentroid": "スペクトル重心",
+      "hnr": "HNR",
+      "intonation": "イントネーション"
+    },
     "clearAll": "履歴をすべて削除",
     "confirmClear": "すべての履歴を削除しますか？"
   },

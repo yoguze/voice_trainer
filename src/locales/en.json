@@ -62,7 +62,18 @@
   "history": {
     "title": "Practice history",
     "empty": "No practice sessions yet",
-    "scoreChart": "Overall score trend",
+    "scoreChart": "Score trends",
+    "chartMetric": "Chart metric",
+    "scoreUnit": " pts",
+    "metrics": {
+      "total": "Overall",
+      "all": "All",
+      "f0": "F0",
+      "formant": "Formant",
+      "spectralCentroid": "Spectral centroid",
+      "hnr": "HNR",
+      "intonation": "Intonation"
+    },
     "clearAll": "Clear all history",
     "confirmClear": "Delete all history?"
   },
