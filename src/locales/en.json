@@ -4,9 +4,18 @@
     "description": "PWA for voice feminization practice"
   },
   "nav": {
+    "play": "Play",
     "settings": "Settings",
     "practice": "Practice",
     "history": "History"
+  },
+  "title": {
+    "tagline": "Train your voice, at your pace",
+    "description": "Analyze 5 voice metrics in real time and score them against your voice type. A browser-only voice training app.",
+    "feature1": "Set goals across pitch, quality, and intonation",
+    "feature2": "Recording and analysis stay on your device",
+    "feature3": "Track progress with per-metric charts",
+    "privacyNote": "Audio is never sent to a server"
   },
   "settings": {
     "title": "Voice Type Settings",

@@ -14,14 +14,18 @@ export default function HistoryPage() {
   const [sessions, setSessions] = useState<Session[]>([]);
   const [loaded, setLoaded] = useState(false);
 
-  const refresh = async () => {
-    const data = await getAllSessions();
-    setSessions(data);
-    setLoaded(true);
-  };
-
   useEffect(() => {
-    void refresh();
+    let cancelled = false;
+
+    void getAllSessions().then((data) => {
+      if (cancelled) return;
+      setSessions(data);
+      setLoaded(true);
+    });
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const handleClear = async () => {

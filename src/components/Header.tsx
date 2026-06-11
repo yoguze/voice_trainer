@@ -1,21 +1,24 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FadeIn } from "@/components/motion";
 
-export function Header() {
+type HeaderProps = {
+  locale: string;
+};
+
+export function Header({ locale }: HeaderProps) {
   const t = useTranslations("nav");
-  const locale = useLocale();
   const pathname = usePathname();
 
   const otherLocale = locale === "ja" ? "en" : "ja";
   const switchedPath = pathname.replace(`/${locale}`, `/${otherLocale}`);
 
   const links = [
-    { href: `/${locale}`, label: t("settings") },
+    { href: `/${locale}/settings`, label: t("settings") },
     { href: `/${locale}/practice`, label: t("practice") },
     { href: `/${locale}/history`, label: t("history") },
   ];
@@ -28,10 +31,10 @@ export function Header() {
       className="sticky top-0 z-20 border-b border-pink-100 bg-white/90 backdrop-blur"
     >
       <div className="mx-auto flex max-w-3xl items-center justify-between gap-4 px-4 py-3">
-        <div className="flex items-center gap-2">
+        <Link href={`/${locale}`} className="flex items-center gap-2">
           <span className="text-xl">🎤</span>
           <span className="font-semibold text-pink-500">Voice Trainer</span>
-        </div>
+        </Link>
         <nav className="flex items-center gap-2 text-sm">
           {links.map((link) => {
             const isActive = pathname === link.href;

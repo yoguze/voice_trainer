@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
-import { Header } from "@/components/Header";
+import { AppChrome } from "@/components/AppChrome";
 import { HtmlLang } from "@/components/HtmlLang";
 import { StoreHydrator } from "@/components/StoreHydrator";
 import { routing } from "@/i18n/routing";
@@ -30,8 +30,7 @@ export default async function LocaleLayout({
     <NextIntlClientProvider messages={messages}>
       <StoreHydrator />
       <HtmlLang locale={locale} />
-      <Header />
-      <main className="flex flex-1 flex-col">{children}</main>
+      <AppChrome locale={locale}>{children}</AppChrome>
     </NextIntlClientProvider>
   );
 }

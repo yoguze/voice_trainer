@@ -26,7 +26,7 @@ export default function ResultPage() {
 
   useEffect(() => {
     if (hasHydrated && !result) {
-      router.replace(`/${locale}`);
+      router.replace(`/${locale}/settings`);
     }
   }, [hasHydrated, result, locale, router]);
 
