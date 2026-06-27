@@ -73,9 +73,8 @@
     "title": "Practice",
     "subtitle": "Tap the mic button to record your voice",
     "phraseTitle": "Practice phrase",
-    "phraseSubtitle": "Each voice type has phrases designed for more consistent comparison. Read the selected phrase when recording.",
-    "choosePhrase": "Choose phrase",
-    "selectedPhrase": "Selected",
+    "phraseSubtitle": "Each voice type has a phrase set designed for more consistent comparison. Read both sentences continuously when recording.",
+    "readPhrase": "Read this phrase set continuously",
     "recording": "Recording…",
     "tapToStart": "Tap to start recording",
     "tapToStop": "Tap to stop recording",
@@ -84,6 +83,10 @@
     "needSettings": "Please configure your voice type first"
   },
   "practicePhrases": {
+    "naturalPrompt": "Good morning, it feels a little warm today. Do you want to go shopping together later?",
+    "softPrompt": "It's okay, take your time. You don't have to push yourself. I'll wait for you.",
+    "cutePrompt": "Hey, hey, let's do our best together today! Look, look, isn't this super cute?",
+    "coolPrompt": "No need to rush. Let's move at our own pace. It's okay, stay calm and handle it one step at a time.",
     "naturalMorning": "Good morning, it feels a little warm today.",
     "naturalShopping": "Do you want to go shopping together later?",
     "softReassure": "It's okay, take your time.",

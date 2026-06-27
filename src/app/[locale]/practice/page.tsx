@@ -1,19 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 import { AnimatedPage } from "@/components/motion";
 import { PageShell } from "@/components/Header";
 import { Recorder } from "@/components/Recorder";
-import { getPracticePhraseIds } from "@/lib/practice-phrases";
+import { getPracticePhraseId } from "@/lib/practice-phrases";
 import { getRecommendedProfileIdForSelection } from "@/lib/targets";
 import {
   useStoreHydrated,
   useVoiceTrainerStore,
 } from "@/stores/voice-trainer-store";
-import type { PracticePhraseId } from "@/types";
 
 export default function PracticePage() {
   const t = useTranslations("practice");
@@ -23,14 +21,7 @@ export default function PracticePage() {
   const voiceType = useVoiceTrainerStore((state) => state.voiceType);
   const phraseProfileId =
     getRecommendedProfileIdForSelection(voiceType) ?? "natural";
-  const phraseIds = getPracticePhraseIds(phraseProfileId);
-  const [selectedPhraseId, setSelectedPhraseId] = useState<PracticePhraseId>(
-    phraseIds[0],
-  );
-
-  useEffect(() => {
-    setSelectedPhraseId(phraseIds[0]);
-  }, [phraseIds]);
+  const phraseId = getPracticePhraseId(phraseProfileId);
 
   return (
     <PageShell title={t("title")} subtitle={t("subtitle")}>
@@ -47,33 +38,17 @@ export default function PracticePage() {
             <p className="mt-1 text-sm text-slate-500">
               {t("phraseSubtitle")}
             </p>
-            <div className="mt-4 grid gap-3 md:grid-cols-2">
-              {phraseIds.map((phraseId) => {
-                const isSelected = selectedPhraseId === phraseId;
-                return (
-                  <button
-                    key={phraseId}
-                    type="button"
-                    onClick={() => setSelectedPhraseId(phraseId)}
-                    className={`rounded-2xl border p-4 text-left transition ${
-                      isSelected
-                        ? "border-pink-400 bg-gradient-to-br from-pink-100 to-purple-100 text-pink-700 shadow-sm"
-                        : "border-slate-200 bg-slate-50 text-slate-600 hover:border-pink-200 hover:bg-pink-50"
-                    }`}
-                  >
-                    <span className="text-xs font-semibold uppercase tracking-wide opacity-70">
-                      {isSelected ? t("selectedPhrase") : t("choosePhrase")}
-                    </span>
-                    <p className="mt-2 text-lg font-semibold leading-8">
-                      {phraseT(phraseId)}
-                    </p>
-                  </button>
-                );
-              })}
+            <div className="mt-4 rounded-2xl border border-pink-200 bg-gradient-to-br from-pink-50 to-purple-50 p-5 text-pink-700">
+              <span className="text-xs font-semibold uppercase tracking-wide opacity-70">
+                {t("readPhrase")}
+              </span>
+              <p className="mt-2 text-xl font-semibold leading-9">
+                {phraseT(phraseId)}
+              </p>
             </div>
           </motion.section>
 
-          <Recorder locale={params.locale} promptPhraseId={selectedPhraseId} />
+          <Recorder locale={params.locale} promptPhraseId={phraseId} />
         </AnimatedPage>
       ) : (
         <p className="text-center text-slate-500">{t("needSettings")}</p>

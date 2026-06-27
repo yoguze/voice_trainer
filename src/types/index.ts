@@ -3,6 +3,10 @@ export type Level = 1 | 2 | 3 | 4;
 export type RecommendedVoiceProfileId = "natural" | "soft" | "cute" | "cool";
 export type VoiceProfileId = RecommendedVoiceProfileId | "custom";
 export type PracticePhraseId =
+  | "naturalPrompt"
+  | "softPrompt"
+  | "cutePrompt"
+  | "coolPrompt"
   | "naturalMorning"
   | "naturalShopping"
   | "softReassure"
