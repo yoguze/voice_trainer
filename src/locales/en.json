@@ -152,6 +152,11 @@
       "hnr": "How little breathiness or noise is present. Aim for a light, steady tone without pushing too much air.",
       "intonation": "Pitch movement across the phrase. Natural rises and falls help this score improve."
     },
+    "viewDetails": "Click to view details",
+    "selected": "Showing details",
+    "detailTitle": "History details",
+    "scoreGap": "To perfect",
+    "targetDiff": "Target difference",
     "clearAll": "Clear all history",
     "confirmClear": "Delete all history?"
   },
