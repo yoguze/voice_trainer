@@ -58,6 +58,7 @@
     "totalScore": "Overall score",
     "retry": "Practice again",
     "saveAndHistory": "Save & view history",
+    "viewHistory": "View history",
     "f0": "F0 (pitch)",
     "formantF1": "Formant F1",
     "formantF2": "Formant F2",
@@ -66,7 +67,65 @@
     "hnr": "HNR (breathiness)",
     "intonation": "Intonation",
     "measured": "Measured",
-    "target": "Target"
+    "target": "Target",
+    "improvementLabel": "How to improve",
+    "feedbackLabel": "This attempt",
+    "metricDescriptions": {
+      "f0": "The center of your pitch. A higher score means your voice is staying close to the selected pitch range.",
+      "formantF1": "A lower resonance component affected by mouth opening and tongue position. It is a reference for how close your vowel shape is to the target.",
+      "formantF2": "A higher resonance component affected by tongue placement and oral resonance. It helps reflect brightness and vowel clarity.",
+      "spectralCentroid": "A measure of vocal brightness. Higher values tend to sound brighter, while lower values tend to sound calmer or darker.",
+      "hnr": "The ratio between harmonic voice energy and noise. Higher values are measured as clearer, less breathy voice.",
+      "intonation": "The pitch movement range during the recording. Larger values indicate more expression, while smaller values can sound flatter."
+    },
+    "metricTips": {
+      "f0": "Avoid squeezing your throat. Start short phrases slightly below the target, then gradually move closer.",
+      "formant": "Try a slight smile, a more forward tongue position, and smaller, cleaner vowel shapes.",
+      "spectralCentroid": "For a brighter sound, aim resonance toward the front of the mouth. If it becomes harsh, reduce excess air pressure.",
+      "hnr": "Use less breath leakage and practice sustaining a light, steady tone.",
+      "intonation": "Add small pitch movements across the whole phrase, then listen back for places that sound too flat."
+    },
+    "feedback": {
+      "onTarget": "This is very close to the target. Try to remember how this placement felt and repeat it once more.",
+      "comment": "{technical} {image}",
+      "severity": {
+        "near": "slightly",
+        "noticeable": "noticeably",
+        "large": "well",
+        "veryLarge": "quite far",
+        "extreme": "very far"
+      },
+      "technical": {
+        "high": "This is {severity} above the target.",
+        "low": "This is {severity} below the target."
+      },
+      "image": {
+        "f0": {
+          "high": "Try landing the pitch a little lower while keeping the throat relaxed and the air moving forward.",
+          "low": "Imagine the voice stretching upward in a thin line, then place it just a little higher without pushing."
+        },
+        "formantF1": {
+          "high": "Avoid opening the mouth too much and try shaping the vowel a little smaller.",
+          "low": "Create a little more vertical space in the mouth so the vowel does not get too compressed."
+        },
+        "formantF2": {
+          "high": "The resonance may be too far forward. Keep some space farther back instead of making the sound only at the lips.",
+          "low": "Try a slight smile and a more forward tongue position to move toward a brighter vowel."
+        },
+        "spectralCentroid": {
+          "high": "The sound is on the bright side. Use less air pressure and imagine a slightly rounder resonance.",
+          "low": "The sound is on the darker side. Aim the resonance toward the front of the mouth and brighten it slightly."
+        },
+        "hnr": {
+          "high": "The voice is clearer and less breathy than the target. If you want to match it, add a very light breathy layer.",
+          "low": "There is more breath noise than the target. Imagine sustaining a thin, steady line instead of letting too much air escape."
+        },
+        "intonation": {
+          "high": "The pitch movement is large. Try making a gentle slope instead of letting the ending jump too much.",
+          "low": "The pitch movement is small. Add one small hill inside the phrase so it does not sound too flat."
+        }
+      }
+    }
   },
   "history": {
     "title": "Practice history",
@@ -82,6 +141,16 @@
       "spectralCentroid": "Spectral centroid",
       "hnr": "HNR",
       "intonation": "Intonation"
+    },
+    "metricGuideTitle": "How to read the metrics",
+    "metricGuideIntro": "In the chart, higher scores mean the recording is closer to your selected target.",
+    "metricGuide": {
+      "total": "A weighted score across all metrics. Start with the overall trend, then inspect which metric caused a drop.",
+      "f0": "The center of your pitch. Scores improve when your pitch stays near the target. Short, steady phrases help.",
+      "formant": "A combined F1/F2 resonance score. Mouth opening, tongue position, and vowel shape are the main levers.",
+      "spectralCentroid": "Vocal brightness. Forward resonance and slight mouth-shape changes can move this value.",
+      "hnr": "How little breathiness or noise is present. Aim for a light, steady tone without pushing too much air.",
+      "intonation": "Pitch movement across the phrase. Natural rises and falls help this score improve."
     },
     "clearAll": "Clear all history",
     "confirmClear": "Delete all history?"

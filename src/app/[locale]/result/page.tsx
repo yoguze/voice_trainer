@@ -3,12 +3,15 @@
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { AnimatedPage, MotionButton } from "@/components/motion";
 import { PageShell } from "@/components/Header";
 import { ScoreCard } from "@/components/ScoreCard";
-import { saveSession } from "@/lib/db";
+import {
+  getMetricFeedback,
+  type FeedbackMetricKey,
+} from "@/lib/metric-feedback";
 import { scoreMetric } from "@/lib/scoring";
 import {
   useLatestResult,
@@ -22,7 +25,6 @@ export default function ResultPage() {
   const router = useRouter();
   const result = useLatestResult();
   const hasHydrated = useStoreHydrated();
-  const [saved, setSaved] = useState(false);
 
   useEffect(() => {
     if (hasHydrated && !result) {
@@ -34,6 +36,26 @@ export default function ResultPage() {
     return null;
   }
 
+  const buildFeedbackComment = (
+    metricKey: FeedbackMetricKey,
+    measured: number,
+    target: number,
+    score: number,
+  ) => {
+    const feedback = getMetricFeedback(measured, target, score);
+
+    if (feedback.isOnTarget) {
+      return t("feedback.onTarget");
+    }
+
+    return t("feedback.comment", {
+      technical: t(`feedback.technical.${feedback.direction}`, {
+        severity: t(`feedback.severity.${feedback.band}`),
+      }),
+      image: t(`feedback.image.${metricKey}.${feedback.direction}`),
+    });
+  };
+
   const metrics = [
     {
       label: t("f0"),
@@ -41,6 +63,14 @@ export default function ResultPage() {
       target: result.targets.F0,
       score: result.scores.F0,
       unit: common("hz"),
+      description: t("metricDescriptions.f0"),
+      improvement: t("metricTips.f0"),
+      feedback: buildFeedbackComment(
+        "f0",
+        result.measured.F0,
+        result.targets.F0,
+        result.scores.F0,
+      ),
     },
     {
       label: t("formantF1"),
@@ -49,6 +79,14 @@ export default function ResultPage() {
       score: scoreMetric(result.measured.F1, result.targets.formant.F1),
       unit: common("hz"),
       note: t("formantNote"),
+      description: t("metricDescriptions.formantF1"),
+      improvement: t("metricTips.formant"),
+      feedback: buildFeedbackComment(
+        "formantF1",
+        result.measured.F1,
+        result.targets.formant.F1,
+        scoreMetric(result.measured.F1, result.targets.formant.F1),
+      ),
     },
     {
       label: t("formantF2"),
@@ -57,6 +95,14 @@ export default function ResultPage() {
       score: scoreMetric(result.measured.F2, result.targets.formant.F2),
       unit: common("hz"),
       note: t("formantNote"),
+      description: t("metricDescriptions.formantF2"),
+      improvement: t("metricTips.formant"),
+      feedback: buildFeedbackComment(
+        "formantF2",
+        result.measured.F2,
+        result.targets.formant.F2,
+        scoreMetric(result.measured.F2, result.targets.formant.F2),
+      ),
     },
     {
       label: t("spectralCentroid"),
@@ -64,6 +110,14 @@ export default function ResultPage() {
       target: result.targets.spectralCentroid,
       score: result.scores.spectralCentroid,
       unit: common("hz"),
+      description: t("metricDescriptions.spectralCentroid"),
+      improvement: t("metricTips.spectralCentroid"),
+      feedback: buildFeedbackComment(
+        "spectralCentroid",
+        result.measured.spectralCentroid,
+        result.targets.spectralCentroid,
+        result.scores.spectralCentroid,
+      ),
     },
     {
       label: t("hnr"),
@@ -71,6 +125,14 @@ export default function ResultPage() {
       target: result.targets.HNR,
       score: result.scores.HNR,
       unit: common("db"),
+      description: t("metricDescriptions.hnr"),
+      improvement: t("metricTips.hnr"),
+      feedback: buildFeedbackComment(
+        "hnr",
+        result.measured.HNR,
+        result.targets.HNR,
+        result.scores.HNR,
+      ),
     },
     {
       label: t("intonation"),
@@ -78,21 +140,16 @@ export default function ResultPage() {
       target: result.targets.intonation,
       score: result.scores.intonation,
       unit: common("oct"),
+      description: t("metricDescriptions.intonation"),
+      improvement: t("metricTips.intonation"),
+      feedback: buildFeedbackComment(
+        "intonation",
+        result.measured.intonation,
+        result.targets.intonation,
+        result.scores.intonation,
+      ),
     },
   ];
-
-  const handleSave = async () => {
-    await saveSession({
-      id: crypto.randomUUID(),
-      createdAt: Date.now(),
-      voiceType: result.voiceType,
-      targets: result.targets,
-      measured: result.measured,
-      scores: result.scores,
-    });
-    setSaved(true);
-    router.push(`/${locale}/history`);
-  };
 
   return (
     <PageShell title={t("title")}>
@@ -109,11 +166,10 @@ export default function ResultPage() {
             </Link>
           </motion.div>
           <MotionButton
-            onClick={() => void handleSave()}
-            disabled={saved}
+            onClick={() => router.push(`/${locale}/history`)}
             className="rounded-full bg-gradient-to-r from-pink-400 to-purple-400 px-6 py-3 font-semibold text-white shadow-md disabled:opacity-60"
           >
-            {saved ? "✓" : t("saveAndHistory")}
+            {t("viewHistory")}
           </MotionButton>
         </div>
       </AnimatedPage>

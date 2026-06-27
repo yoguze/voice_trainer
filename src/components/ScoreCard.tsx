@@ -12,6 +12,9 @@ type MetricRow = {
   score: number;
   unit: string;
   note?: string;
+  description?: string;
+  improvement?: string;
+  feedback?: string;
 };
 
 type ScoreCardProps = {
@@ -54,6 +57,21 @@ export function ScoreCard({ metrics, totalScore }: ScoreCardProps) {
               {metric.unit} / {t("target")}: {metric.target.toFixed(1)}
               {metric.unit}
             </p>
+            {metric.description ? (
+              <p className="mt-3 text-sm leading-6 text-slate-600">
+                {metric.description}
+              </p>
+            ) : null}
+            {metric.feedback ? (
+              <p className="mt-2 rounded-xl bg-purple-50 px-3 py-2 text-sm leading-6 text-purple-700">
+                {t("feedbackLabel")}: {metric.feedback}
+              </p>
+            ) : null}
+            {metric.improvement ? (
+              <p className="mt-2 rounded-xl bg-pink-50 px-3 py-2 text-sm leading-6 text-pink-700">
+                {t("improvementLabel")}: {metric.improvement}
+              </p>
+            ) : null}
           </motion.div>
         ))}
       </motion.div>

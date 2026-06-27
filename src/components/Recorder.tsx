@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { analyzeRecording } from "@/lib/audio/analyser";
+import { saveSession } from "@/lib/db";
 import { useVoiceTrainerStore } from "@/stores/voice-trainer-store";
 import { WaveVisualizer } from "./WaveVisualizer";
 
@@ -77,6 +78,15 @@ export function Recorder({ locale }: RecorderProps) {
           const blob = new Blob(chunksRef.current, { type: "audio/webm" });
           const targets = getTargets();
           const result = await analyzeRecording(blob, voiceType, targets);
+          try {
+            await saveSession({
+              id: crypto.randomUUID(),
+              createdAt: Date.now(),
+              ...result,
+            });
+          } catch (saveError) {
+            console.warn("Failed to save practice session", saveError);
+          }
           setLatestResult(result);
           router.push(`/${locale}/result`);
         } catch {

@@ -3,11 +3,25 @@
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
-import { AnimatedPage, MotionButton, staggerContainer, staggerItem } from "@/components/motion";
+import {
+  AnimatedPage,
+  MotionButton,
+  staggerContainer,
+  staggerItem,
+} from "@/components/motion";
 import { HistoryChart } from "@/components/HistoryChart";
 import { PageShell } from "@/components/Header";
 import { clearSessions, getAllSessions } from "@/lib/db";
 import type { Session } from "@/types";
+
+const METRIC_GUIDE_KEYS = [
+  "total",
+  "f0",
+  "formant",
+  "spectralCentroid",
+  "hnr",
+  "intonation",
+] as const;
 
 export default function HistoryPage() {
   const t = useTranslations("history");
@@ -50,6 +64,33 @@ export default function HistoryPage() {
               </h2>
               <HistoryChart sessions={sessions} />
             </motion.div>
+          ) : null}
+
+          {sessions.length > 0 ? (
+            <motion.section
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="rounded-2xl border border-pink-100 bg-white p-4 shadow-sm"
+            >
+              <h2 className="text-lg font-semibold text-slate-700">
+                {t("metricGuideTitle")}
+              </h2>
+              <p className="mt-1 text-sm text-slate-500">
+                {t("metricGuideIntro")}
+              </p>
+              <div className="mt-4 grid gap-3 md:grid-cols-2">
+                {METRIC_GUIDE_KEYS.map((key) => (
+                  <div key={key} className="rounded-xl bg-pink-50 p-3">
+                    <h3 className="font-semibold text-pink-700">
+                      {t(`metrics.${key}`)}
+                    </h3>
+                    <p className="mt-1 text-sm leading-6 text-slate-600">
+                      {t(`metricGuide.${key}`)}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </motion.section>
           ) : null}
 
           <motion.ul
