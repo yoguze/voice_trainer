@@ -72,12 +72,26 @@
   "practice": {
     "title": "練習",
     "subtitle": "マイクボタンを押して録音してください",
+    "phraseTitle": "読むフレーズ",
+    "phraseSubtitle": "声のタイプごとに比較しやすいフレーズを用意しています。選んだフレーズを読んで録音してください。",
+    "choosePhrase": "選択できます",
+    "selectedPhrase": "選択中",
     "recording": "録音中…",
     "tapToStart": "タップして録音開始",
     "tapToStop": "タップして録音停止",
     "analyzing": "解析中…",
     "micError": "マイクへのアクセスが拒否されました",
     "needSettings": "先にボイスタイプを設定してください"
+  },
+  "practicePhrases": {
+    "naturalMorning": "おはよう、今日は少しあたたかいね。",
+    "naturalShopping": "あとで一緒に買い物に行かない？",
+    "softReassure": "大丈夫だよ、ゆっくりでいいからね。",
+    "softWait": "無理しなくていいよ、ちゃんと待ってるから。",
+    "cuteTogether": "ねえねえ、今日も一緒にがんばろう！",
+    "cuteLook": "見て見て、これすっごくかわいくない？",
+    "coolPace": "焦らなくていい。自分のペースで進もう。",
+    "coolStep": "大丈夫、落ち着いてひとつずつ片づけよう。"
   },
   "result": {
     "title": "結果",
@@ -184,6 +198,7 @@
     "viewDetails": "クリックして詳細を見る",
     "selected": "詳細を表示中",
     "detailTitle": "履歴の詳細",
+    "promptPhrase": "読んだフレーズ",
     "scoreGap": "満点まで",
     "targetDiff": "目標との差",
     "clearAll": "履歴をすべて削除",

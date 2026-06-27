@@ -5,15 +5,17 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { analyzeRecording } from "@/lib/audio/analyser";
-import { saveSession } from "@/lib/db";
+import { saveSession, saveSessionWithRecording } from "@/lib/db";
 import { useVoiceTrainerStore } from "@/stores/voice-trainer-store";
+import type { PracticePhraseId } from "@/types";
 import { WaveVisualizer } from "./WaveVisualizer";
 
 type RecorderProps = {
   locale: string;
+  promptPhraseId?: PracticePhraseId;
 };
 
-export function Recorder({ locale }: RecorderProps) {
+export function Recorder({ locale, promptPhraseId }: RecorderProps) {
   const t = useTranslations("practice");
   const router = useRouter();
   const voiceType = useVoiceTrainerStore((state) => state.voiceType);
@@ -78,16 +80,23 @@ export function Recorder({ locale }: RecorderProps) {
           const blob = new Blob(chunksRef.current, { type: "audio/webm" });
           const targets = getTargets();
           const result = await analyzeRecording(blob, voiceType, targets);
+          const resultWithPhrase = {
+            ...result,
+            promptPhraseId,
+          };
+          const session = {
+            id: crypto.randomUUID(),
+            createdAt: Date.now(),
+            ...resultWithPhrase,
+          };
+
           try {
-            await saveSession({
-              id: crypto.randomUUID(),
-              createdAt: Date.now(),
-              ...result,
-            });
+            await saveSessionWithRecording(session, blob);
           } catch (saveError) {
             console.warn("Failed to save practice session", saveError);
+            await saveSession(session);
           }
-          setLatestResult(result);
+          setLatestResult(resultWithPhrase);
           router.push(`/${locale}/result`);
         } catch {
           setError(t("micError"));

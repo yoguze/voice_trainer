@@ -43,6 +43,7 @@ export default function HistoryPage() {
   const resultT = useTranslations("result");
   const common = useTranslations("common");
   const profileT = useTranslations("voiceProfiles");
+  const phraseT = useTranslations("practicePhrases");
   const currentProfileId = useVoiceTrainerStore(
     (state) => state.voiceType.profileId,
   );
@@ -332,6 +333,12 @@ export default function HistoryPage() {
                   <p className="mt-1 text-sm text-purple-600">
                     {profileT(`${getSessionProfileId(selectedSession)}.name`)}
                   </p>
+                  {selectedSession.promptPhraseId ? (
+                    <p className="mt-2 rounded-xl bg-purple-50 px-3 py-2 text-sm leading-6 text-purple-700">
+                      {t("promptPhrase")}:{" "}
+                      {phraseT(selectedSession.promptPhraseId)}
+                    </p>
+                  ) : null}
                 </div>
                 <span className="rounded-full bg-pink-100 px-4 py-2 text-lg font-bold text-pink-600">
                   {selectedSession.scores.total}

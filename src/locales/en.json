@@ -72,12 +72,26 @@
   "practice": {
     "title": "Practice",
     "subtitle": "Tap the mic button to record your voice",
+    "phraseTitle": "Practice phrase",
+    "phraseSubtitle": "Each voice type has phrases designed for more consistent comparison. Read the selected phrase when recording.",
+    "choosePhrase": "Choose phrase",
+    "selectedPhrase": "Selected",
     "recording": "Recording…",
     "tapToStart": "Tap to start recording",
     "tapToStop": "Tap to stop recording",
     "analyzing": "Analyzing…",
     "micError": "Microphone access was denied",
     "needSettings": "Please configure your voice type first"
+  },
+  "practicePhrases": {
+    "naturalMorning": "Good morning, it feels a little warm today.",
+    "naturalShopping": "Do you want to go shopping together later?",
+    "softReassure": "It's okay, take your time.",
+    "softWait": "You don't have to push yourself. I'll wait for you.",
+    "cuteTogether": "Hey, hey, let's do our best together today!",
+    "cuteLook": "Look, look, isn't this super cute?",
+    "coolPace": "No need to rush. Let's move at our own pace.",
+    "coolStep": "It's okay, stay calm and handle it one step at a time."
   },
   "result": {
     "title": "Results",
@@ -184,6 +198,7 @@
     "viewDetails": "Click to view details",
     "selected": "Showing details",
     "detailTitle": "History details",
+    "promptPhrase": "Prompt phrase",
     "scoreGap": "To perfect",
     "targetDiff": "Target difference",
     "clearAll": "Clear all history",
