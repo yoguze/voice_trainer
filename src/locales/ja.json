@@ -19,11 +19,37 @@
   },
   "settings": {
     "title": "ボイスタイプ設定",
-    "subtitle": "3つの軸から練習目標を選んでください",
+    "subtitle": "なりたい女性声のタイプを選んでください",
+    "profileTitle": "おすすめボイス",
+    "profileSubtitle": "まずは4つの女性タイプから選ぶのがおすすめです。細かく調整したい場合は自由調整を選んでください。",
+    "lockedProfileTitle": "おすすめタイプのパラメータを使用中",
+    "lockedProfileDescription": "このタイプは比較しやすいように目標値が固定されています。細かく変えたい場合は「自由調整」を選んでください。",
     "pitchAxis": "音域タイプ",
     "qualityAxis": "声質タイプ",
     "intonationAxis": "イントネーション",
     "startPractice": "練習を始める"
+  },
+  "voiceProfiles": {
+    "natural": {
+      "name": "ナチュラル",
+      "description": "普段使いしやすい、自然で聞き取りやすい女性声。迷った人向けの標準タイプです。"
+    },
+    "soft": {
+      "name": "やわらか",
+      "description": "優しく落ち着いた、包み込むような女性声。低めでも女性らしく聞かせたい人向けです。"
+    },
+    "cute": {
+      "name": "キュート",
+      "description": "明るく少し高めで、可愛い印象の女性声。歌や配信にも向きやすいタイプです。"
+    },
+    "cool": {
+      "name": "クール",
+      "description": "透明感があり、甘すぎない綺麗系の女性声。大人っぽく整えたい人向けです。"
+    },
+    "custom": {
+      "name": "自由調整",
+      "description": "音域・声質・イントネーションを自分で調整します。履歴一覧には残りますが、比較グラフには表示されません。"
+    }
   },
   "pitchTypes": {
     "deepAlto": "ディープアルト",
@@ -131,6 +157,9 @@
     "title": "練習履歴",
     "empty": "まだ練習記録がありません",
     "scoreChart": "スコアの推移",
+    "chartProfile": "グラフに表示するおすすめタイプ",
+    "customChartNotice": "比較を正しくするため、自由調整の履歴はグラフには表示せず、一覧と詳細で確認できます。",
+    "emptyChartProfile": "{profile} の練習履歴はまだありません",
     "chartMetric": "表示する指標",
     "scoreUnit": "点",
     "metrics": {

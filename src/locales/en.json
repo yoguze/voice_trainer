@@ -19,11 +19,37 @@
   },
   "settings": {
     "title": "Voice Type Settings",
-    "subtitle": "Choose your practice targets across three axes",
+    "subtitle": "Choose the type of feminine voice you want to train",
+    "profileTitle": "Recommended voices",
+    "profileSubtitle": "Start with one of these four feminine voice types. Choose custom if you want to tune each parameter yourself.",
+    "lockedProfileTitle": "Using fixed recommended parameters",
+    "lockedProfileDescription": "This profile uses fixed targets so progress stays comparable. Choose Custom if you want to change the axes manually.",
     "pitchAxis": "Pitch range",
     "qualityAxis": "Voice quality",
     "intonationAxis": "Intonation",
     "startPractice": "Start practice"
+  },
+  "voiceProfiles": {
+    "natural": {
+      "name": "Natural",
+      "description": "A practical, natural, easy-to-understand feminine voice. The standard choice if you are not sure where to start."
+    },
+    "soft": {
+      "name": "Soft",
+      "description": "A gentle, calm, warm feminine voice. Good if you want a lower voice that still reads feminine."
+    },
+    "cute": {
+      "name": "Cute",
+      "description": "A bright, slightly higher, cute feminine voice. A good fit for singing or streaming practice."
+    },
+    "cool": {
+      "name": "Cool",
+      "description": "A clear, polished voice with less sweetness. Good if you want a calm, mature impression."
+    },
+    "custom": {
+      "name": "Custom",
+      "description": "Adjust pitch, quality, and intonation yourself. Custom sessions stay in the list, but are excluded from comparison charts."
+    }
   },
   "pitchTypes": {
     "deepAlto": "Deep Alto",
@@ -131,6 +157,9 @@
     "title": "Practice history",
     "empty": "No practice sessions yet",
     "scoreChart": "Score trends",
+    "chartProfile": "Recommended profile shown in the chart",
+    "customChartNotice": "To keep comparisons meaningful, custom sessions are excluded from charts and remain available in the list and details.",
+    "emptyChartProfile": "No sessions yet for {profile}",
     "chartMetric": "Chart metric",
     "scoreUnit": " pts",
     "metrics": {

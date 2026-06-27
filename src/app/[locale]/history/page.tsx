@@ -16,8 +16,18 @@ import {
   getMetricFeedback,
   type FeedbackMetricKey,
 } from "@/lib/metric-feedback";
+import {
+  RECOMMENDED_PROFILE_IDS,
+  getRecommendedProfileIdForSelection,
+  isRecommendedVoiceProfileId,
+} from "@/lib/targets";
 import { scoreMetric } from "@/lib/scoring";
-import type { Session } from "@/types";
+import { useVoiceTrainerStore } from "@/stores/voice-trainer-store";
+import type {
+  RecommendedVoiceProfileId,
+  Session,
+  VoiceProfileId,
+} from "@/types";
 
 const METRIC_GUIDE_KEYS = [
   "total",
@@ -32,14 +42,29 @@ export default function HistoryPage() {
   const t = useTranslations("history");
   const resultT = useTranslations("result");
   const common = useTranslations("common");
+  const profileT = useTranslations("voiceProfiles");
+  const currentProfileId = useVoiceTrainerStore(
+    (state) => state.voiceType.profileId,
+  );
   const [sessions, setSessions] = useState<Session[]>([]);
   const [loaded, setLoaded] = useState(false);
+  const [selectedChartProfileId, setSelectedChartProfileId] =
+    useState<RecommendedVoiceProfileId>(
+      isRecommendedVoiceProfileId(currentProfileId)
+        ? currentProfileId
+        : "natural",
+    );
   const [selectedSessionId, setSelectedSessionId] = useState<string | null>(
     null,
   );
 
   const selectedSession =
     sessions.find((session) => session.id === selectedSessionId) ?? null;
+  const chartSessions = sessions.filter(
+    (session) =>
+      getRecommendedProfileIdForSelection(session.voiceType) ===
+      selectedChartProfileId,
+  );
 
   useEffect(() => {
     let cancelled = false;
@@ -54,6 +79,12 @@ export default function HistoryPage() {
       cancelled = true;
     };
   }, []);
+
+  useEffect(() => {
+    if (isRecommendedVoiceProfileId(currentProfileId)) {
+      setSelectedChartProfileId(currentProfileId);
+    }
+  }, [currentProfileId]);
 
   const handleClear = async () => {
     if (!window.confirm(t("confirmClear"))) return;
@@ -154,6 +185,10 @@ export default function HistoryPage() {
     }));
   };
 
+  const getSessionProfileId = (session: Session): VoiceProfileId => {
+    return getRecommendedProfileIdForSelection(session.voiceType) ?? "custom";
+  };
+
   return (
     <PageShell title={t("title")}>
       {loaded && sessions.length === 0 ? (
@@ -168,7 +203,42 @@ export default function HistoryPage() {
               <h2 className="mb-3 text-lg font-semibold text-slate-700">
                 {t("scoreChart")}
               </h2>
-              <HistoryChart sessions={sessions} />
+              <div className="mb-4 rounded-2xl border border-pink-100 bg-white p-4 shadow-sm">
+                <p className="text-sm font-medium text-slate-600">
+                  {t("chartProfile")}
+                </p>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {RECOMMENDED_PROFILE_IDS.map((profileId) => {
+                    const isSelected = selectedChartProfileId === profileId;
+                    return (
+                      <button
+                        key={profileId}
+                        type="button"
+                        onClick={() => setSelectedChartProfileId(profileId)}
+                        className={`rounded-full px-3 py-1.5 text-xs font-medium transition ${
+                          isSelected
+                            ? "bg-pink-500 text-white shadow-sm"
+                            : "border border-pink-200 bg-white text-slate-600 hover:bg-pink-50"
+                        }`}
+                      >
+                        {profileT(`${profileId}.name`)}
+                      </button>
+                    );
+                  })}
+                </div>
+                <p className="mt-2 text-xs leading-5 text-slate-500">
+                  {t("customChartNotice")}
+                </p>
+              </div>
+              {chartSessions.length > 0 ? (
+                <HistoryChart sessions={chartSessions} />
+              ) : (
+                <p className="rounded-2xl border border-pink-100 bg-white p-4 text-center text-sm text-slate-500 shadow-sm">
+                  {t("emptyChartProfile", {
+                    profile: profileT(`${selectedChartProfileId}.name`),
+                  })}
+                </p>
+              )}
             </motion.div>
           ) : null}
 
@@ -207,6 +277,7 @@ export default function HistoryPage() {
           >
             {sessions.map((session) => {
               const isSelected = selectedSessionId === session.id;
+              const sessionProfileId = getSessionProfileId(session);
               return (
                 <motion.li key={session.id} variants={staggerItem}>
                   <button
@@ -229,9 +300,14 @@ export default function HistoryPage() {
                           {isSelected ? t("selected") : t("viewDetails")}
                         </p>
                       </div>
-                      <span className="text-xl font-bold text-pink-600">
-                        {session.scores.total}
-                      </span>
+                      <div className="text-right">
+                        <span className="text-xl font-bold text-pink-600">
+                          {session.scores.total}
+                        </span>
+                        <p className="mt-1 text-xs text-slate-400">
+                          {profileT(`${sessionProfileId}.name`)}
+                        </p>
+                      </div>
                     </div>
                   </button>
                 </motion.li>
@@ -252,6 +328,9 @@ export default function HistoryPage() {
                   </h2>
                   <p className="mt-1 text-sm text-slate-500">
                     {new Date(selectedSession.createdAt).toLocaleString()}
+                  </p>
+                  <p className="mt-1 text-sm text-purple-600">
+                    {profileT(`${getSessionProfileId(selectedSession)}.name`)}
                   </p>
                 </div>
                 <span className="rounded-full bg-pink-100 px-4 py-2 text-lg font-bold text-pink-600">

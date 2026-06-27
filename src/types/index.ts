@@ -1,6 +1,10 @@
 export type Level = 1 | 2 | 3 | 4;
 
+export type RecommendedVoiceProfileId = "natural" | "soft" | "cute" | "cool";
+export type VoiceProfileId = RecommendedVoiceProfileId | "custom";
+
 export type VoiceTypeSelection = {
+  profileId?: VoiceProfileId;
   pitchType: Level;
   qualityType: Level;
   intonationType: Level;

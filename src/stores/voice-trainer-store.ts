@@ -1,11 +1,17 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import { buildVoiceTargets } from "@/lib/targets";
-import type { PracticeResult, VoiceTargets, VoiceTypeSelection } from "@/types";
+import { buildVoiceTargets, getVoiceProfileSelection } from "@/lib/targets";
+import type {
+  PracticeResult,
+  VoiceProfileId,
+  VoiceTargets,
+  VoiceTypeSelection,
+} from "@/types";
 
 const RESULT_KEY = "voice-trainer-latest-result";
 
 const DEFAULT_VOICE_TYPE: VoiceTypeSelection = {
+  profileId: "natural",
   pitchType: 3,
   qualityType: 3,
   intonationType: 3,
@@ -15,6 +21,7 @@ type VoiceTrainerState = {
   voiceType: VoiceTypeSelection;
   latestResult: PracticeResult | null;
   hasHydrated: boolean;
+  setVoiceProfile: (profileId: VoiceProfileId) => void;
   setVoiceType: (patch: Partial<VoiceTypeSelection>) => void;
   setLatestResult: (result: PracticeResult) => void;
   clearLatestResult: () => void;
@@ -29,9 +36,14 @@ export const useVoiceTrainerStore = create<VoiceTrainerState>()(
       latestResult: null,
       hasHydrated: false,
 
+      setVoiceProfile: (profileId) =>
+        set((state) => ({
+          voiceType: getVoiceProfileSelection(profileId, state.voiceType),
+        })),
+
       setVoiceType: (patch) =>
         set((state) => ({
-          voiceType: { ...state.voiceType, ...patch },
+          voiceType: { ...state.voiceType, ...patch, profileId: "custom" },
         })),
 
       setLatestResult: (result) => {

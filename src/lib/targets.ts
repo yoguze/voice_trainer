@@ -1,4 +1,10 @@
-import type { Level, VoiceTargets, VoiceTypeSelection } from "@/types";
+import type {
+  Level,
+  RecommendedVoiceProfileId,
+  VoiceProfileId,
+  VoiceTargets,
+  VoiceTypeSelection,
+} from "@/types";
 
 const F0_TARGETS: Record<Level, number> = {
   1: 175,
@@ -34,6 +40,98 @@ const INTONATION_TARGETS: Record<Level, number> = {
   3: 1.5,
   4: 2.2,
 };
+
+export type VoiceProfile = {
+  id: VoiceProfileId;
+  selection: VoiceTypeSelection;
+  isRecommended: boolean;
+};
+
+export const RECOMMENDED_VOICE_PROFILES: Record<
+  RecommendedVoiceProfileId,
+  VoiceProfile
+> = {
+  natural: {
+    id: "natural",
+    selection: {
+      profileId: "natural",
+      pitchType: 3,
+      qualityType: 3,
+      intonationType: 3,
+    },
+    isRecommended: true,
+  },
+  soft: {
+    id: "soft",
+    selection: {
+      profileId: "soft",
+      pitchType: 2,
+      qualityType: 2,
+      intonationType: 2,
+    },
+    isRecommended: true,
+  },
+  cute: {
+    id: "cute",
+    selection: {
+      profileId: "cute",
+      pitchType: 4,
+      qualityType: 4,
+      intonationType: 4,
+    },
+    isRecommended: true,
+  },
+  cool: {
+    id: "cool",
+    selection: {
+      profileId: "cool",
+      pitchType: 3,
+      qualityType: 4,
+      intonationType: 2,
+    },
+    isRecommended: true,
+  },
+};
+
+export const RECOMMENDED_PROFILE_IDS = Object.keys(
+  RECOMMENDED_VOICE_PROFILES,
+) as RecommendedVoiceProfileId[];
+
+export function isRecommendedVoiceProfileId(
+  profileId: VoiceProfileId | undefined,
+): profileId is RecommendedVoiceProfileId {
+  return profileId ? profileId in RECOMMENDED_VOICE_PROFILES : false;
+}
+
+export function getVoiceProfileSelection(
+  profileId: VoiceProfileId,
+  fallback: VoiceTypeSelection,
+): VoiceTypeSelection {
+  if (isRecommendedVoiceProfileId(profileId)) {
+    return RECOMMENDED_VOICE_PROFILES[profileId].selection;
+  }
+
+  return { ...fallback, profileId: "custom" };
+}
+
+export function getRecommendedProfileIdForSelection(
+  selection: VoiceTypeSelection,
+): RecommendedVoiceProfileId | null {
+  if (isRecommendedVoiceProfileId(selection.profileId)) {
+    return selection.profileId;
+  }
+
+  return (
+    RECOMMENDED_PROFILE_IDS.find((profileId) => {
+      const profileSelection = RECOMMENDED_VOICE_PROFILES[profileId].selection;
+      return (
+        selection.pitchType === profileSelection.pitchType &&
+        selection.qualityType === profileSelection.qualityType &&
+        selection.intonationType === profileSelection.intonationType
+      );
+    }) ?? null
+  );
+}
 
 export function buildVoiceTargets(selection: VoiceTypeSelection): VoiceTargets {
   const formant = FORMANT_TARGETS[selection.pitchType];
