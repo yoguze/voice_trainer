@@ -1,5 +1,11 @@
 import { detectPitch } from "@/lib/audio/pitch";
 
+const FRAME_SIZE = 2048;
+const HOP_SIZE = 1024;
+const MIN_FRAME_RMS = 0.01;
+const CENTROID_MIN_HZ = 200;
+const CENTROID_MAX_HZ = 5000;
+
 function computeMagnitudeSpectrum(
   samples: Float32Array,
   fftSize: number,
@@ -56,27 +62,70 @@ function fft(real: Float32Array, imag: Float32Array): void {
   }
 }
 
-export function computeSpectralCentroid(
-  channelData: Float32Array,
-  sampleRate: number,
-  fftSize = 4096,
-): number {
-  const magnitudes = computeMagnitudeSpectrum(
-    channelData.subarray(0, Math.min(fftSize, channelData.length)),
-    fftSize,
-  );
+function frameRms(frame: Float32Array): number {
+  let sum = 0;
+  for (let i = 0; i < frame.length; i++) {
+    sum += frame[i] * frame[i];
+  }
+  return Math.sqrt(sum / frame.length);
+}
 
+function median(values: number[]): number {
+  if (values.length === 0) return 0;
+
+  const sorted = [...values].sort((a, b) => a - b);
+  const mid = Math.floor(sorted.length / 2);
+
+  if (sorted.length % 2 === 0) {
+    return (sorted[mid - 1] + sorted[mid]) / 2;
+  }
+
+  return sorted[mid];
+}
+
+function computeFrameSpectralCentroid(
+  frame: Float32Array,
+  sampleRate: number,
+  fftSize = FRAME_SIZE,
+): number | null {
+  const magnitudes = computeMagnitudeSpectrum(frame, fftSize);
   let weightedSum = 0;
   let magnitudeSum = 0;
 
   for (let i = 0; i < magnitudes.length; i++) {
     const frequency = (i * sampleRate) / fftSize;
+    if (frequency < CENTROID_MIN_HZ || frequency > CENTROID_MAX_HZ) continue;
+
     weightedSum += frequency * magnitudes[i];
     magnitudeSum += magnitudes[i];
   }
 
-  if (magnitudeSum === 0) return 0;
+  if (magnitudeSum === 0) return null;
   return weightedSum / magnitudeSum;
+}
+
+export function computeSpectralCentroid(
+  channelData: Float32Array,
+  sampleRate: number,
+): number {
+  const centroidValues: number[] = [];
+
+  for (
+    let start = 0;
+    start + FRAME_SIZE <= channelData.length;
+    start += HOP_SIZE
+  ) {
+    const frame = channelData.subarray(start, start + FRAME_SIZE);
+    if (frameRms(frame) < MIN_FRAME_RMS) continue;
+    if (detectPitch(frame, sampleRate) === null) continue;
+
+    const centroid = computeFrameSpectralCentroid(frame, sampleRate);
+    if (centroid !== null && Number.isFinite(centroid)) {
+      centroidValues.push(centroid);
+    }
+  }
+
+  return median(centroidValues);
 }
 
 function computeFrameHNR(frame: Float32Array, period: number): number | null {
@@ -102,13 +151,17 @@ function computeFrameHNR(frame: Float32Array, period: number): number | null {
 export function computeHNR(
   channelData: Float32Array,
   sampleRate: number,
-  frameSize = 2048,
-  hopSize = 1024,
 ): number {
   const hnrValues: number[] = [];
 
-  for (let start = 0; start + frameSize <= channelData.length; start += hopSize) {
-    const frame = channelData.subarray(start, start + frameSize);
+  for (
+    let start = 0;
+    start + FRAME_SIZE <= channelData.length;
+    start += HOP_SIZE
+  ) {
+    const frame = channelData.subarray(start, start + FRAME_SIZE);
+    if (frameRms(frame) < MIN_FRAME_RMS) continue;
+
     const pitch = detectPitch(frame, sampleRate);
     if (pitch === null) continue;
 
@@ -119,8 +172,5 @@ export function computeHNR(
     }
   }
 
-  if (hnrValues.length === 0) return 0;
-
-  const sum = hnrValues.reduce((acc, value) => acc + value, 0);
-  return sum / hnrValues.length;
+  return median(hnrValues);
 }

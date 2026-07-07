@@ -30,18 +30,28 @@ export const PROFILE_FORMANT_TARGETS: Record<
   cool: { F1: 500, F2: 2400 },
 };
 
+export const PROFILE_QUALITY_TARGETS: Record<
+  RecommendedVoiceProfileId,
+  { spectralCentroid: number; HNR: number }
+> = {
+  natural: { spectralCentroid: 2050, HNR: 18 },
+  soft: { spectralCentroid: 1700, HNR: 13 },
+  cute: { spectralCentroid: 2450, HNR: 16 },
+  cool: { spectralCentroid: 2250, HNR: 21 },
+};
+
 const SPECTRAL_CENTROID_TARGETS: Record<Level, number> = {
-  1: 1400,
-  2: 1700,
+  1: 1650,
+  2: 1850,
   3: 2100,
-  4: 2600,
+  4: 2450,
 };
 
 const HNR_TARGETS: Record<Level, number> = {
-  1: 10,
+  1: 11,
   2: 14,
-  3: 20,
-  4: 24,
+  3: 18,
+  4: 20,
 };
 
 const INTONATION_TARGETS: Record<Level, number> = {
@@ -149,20 +159,34 @@ export function buildVoiceTargets(selection: VoiceTypeSelection): VoiceTargets {
     profileId !== null
       ? PROFILE_FORMANT_TARGETS[profileId]
       : FORMANT_TARGETS[selection.pitchType];
+  const quality =
+    profileId !== null
+      ? PROFILE_QUALITY_TARGETS[profileId]
+      : {
+          spectralCentroid:
+            SPECTRAL_CENTROID_TARGETS[selection.qualityType],
+          HNR: HNR_TARGETS[selection.qualityType],
+        };
 
   return {
     F0: F0_TARGETS[selection.pitchType],
     formant: { F1: formant.F1, F2: formant.F2 },
-    spectralCentroid: SPECTRAL_CENTROID_TARGETS[selection.qualityType],
-    HNR: HNR_TARGETS[selection.qualityType],
+    spectralCentroid: quality.spectralCentroid,
+    HNR: quality.HNR,
     intonation: INTONATION_TARGETS[selection.intonationType],
   };
+}
+
+export function getProfileReferenceId(
+  selection: VoiceTypeSelection,
+): RecommendedVoiceProfileId | "custom" {
+  return getRecommendedProfileIdForSelection(selection) ?? "custom";
 }
 
 export function getFormantReferenceProfileId(
   selection: VoiceTypeSelection,
 ): RecommendedVoiceProfileId | "custom" {
-  return getRecommendedProfileIdForSelection(selection) ?? "custom";
+  return getProfileReferenceId(selection);
 }
 
 export const PITCH_LABELS = [

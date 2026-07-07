@@ -13,7 +13,7 @@ import {
   type FeedbackMetricKey,
 } from "@/lib/metric-feedback";
 import { scoreMetric } from "@/lib/scoring";
-import { getFormantReferenceProfileId } from "@/lib/targets";
+import { getProfileReferenceId } from "@/lib/targets";
 import {
   useLatestResult,
   useStoreHydrated,
@@ -37,10 +37,10 @@ export default function ResultPage() {
     return null;
   }
 
-  const formantReferenceProfileId = getFormantReferenceProfileId(
-    result.voiceType,
-  );
-  const formantReferenceNote = `${t("formantNote")} · ${t(`formantReferences.${formantReferenceProfileId}`)}`;
+  const profileReferenceId = getProfileReferenceId(result.voiceType);
+  const formantReferenceNote = `${t("formantNote")} · ${t(`formantReferences.${profileReferenceId}`)}`;
+  const spectralReferenceNote = `${t("spectralCentroidNote")} · ${t(`qualityReferences.${profileReferenceId}`)}`;
+  const hnrReferenceNote = `${t("hnrNote")} · ${t(`qualityReferences.${profileReferenceId}`)}`;
 
   const buildFeedbackComment = (
     metricKey: FeedbackMetricKey,
@@ -116,6 +116,7 @@ export default function ResultPage() {
       target: result.targets.spectralCentroid,
       score: result.scores.spectralCentroid,
       unit: common("hz"),
+      note: spectralReferenceNote,
       description: t("metricDescriptions.spectralCentroid"),
       improvement: t("metricTips.spectralCentroid"),
       feedback: buildFeedbackComment(
@@ -131,6 +132,7 @@ export default function ResultPage() {
       target: result.targets.HNR,
       score: result.scores.HNR,
       unit: common("db"),
+      note: hnrReferenceNote,
       description: t("metricDescriptions.hnr"),
       improvement: t("metricTips.hnr"),
       feedback: buildFeedbackComment(

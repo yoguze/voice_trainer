@@ -427,6 +427,12 @@ export default function HistoryPage() {
                   `formantReferences.${getSessionProfileId(selectedSession)}`,
                 )}
               </p>
+              <p className="mt-2 rounded-xl bg-sky-50 px-3 py-2 text-xs leading-5 text-sky-800">
+                {resultT("spectralCentroidNote")} / {resultT("hnrNote")} ·{" "}
+                {resultT(
+                  `qualityReferences.${getSessionProfileId(selectedSession)}`,
+                )}
+              </p>
 
               <div className="mt-4 grid gap-3">
                 {buildSessionMetrics(selectedSession).map((metric) => {

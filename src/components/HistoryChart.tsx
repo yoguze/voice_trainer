@@ -174,6 +174,8 @@ export function HistoryChart({ sessions }: HistoryChartProps) {
 
   const isFormantMetric =
     selectedMetric === "formantF1" || selectedMetric === "formantF2";
+  const isQualityMetric =
+    selectedMetric === "spectralCentroid" || selectedMetric === "hnr";
 
   return (
     <div className="space-y-4">
@@ -202,6 +204,9 @@ export function HistoryChart({ sessions }: HistoryChartProps) {
         </div>
         {isFormantMetric ? (
           <p className="text-xs leading-5 text-amber-700">{t("formantChartNotice")}</p>
+        ) : null}
+        {isQualityMetric ? (
+          <p className="text-xs leading-5 text-sky-700">{t("qualityChartNotice")}</p>
         ) : null}
       </div>
 

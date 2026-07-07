@@ -53,6 +53,9 @@ export default function PracticePage() {
             <p className="mt-1 text-xs leading-5 text-purple-600">
               {resultT(`formantReferences.${phraseProfileId}`)}
             </p>
+            <p className="mt-1 text-xs leading-5 text-sky-700">
+              {resultT(`qualityReferences.${phraseProfileId}`)}
+            </p>
           </motion.section>
 
           <Recorder locale={params.locale} promptPhraseId={phraseId} />
