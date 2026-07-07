@@ -85,6 +85,13 @@ export async function getAllSessions(): Promise<Session[]> {
   return sessions.reverse();
 }
 
+export async function getRecording(
+  id: string,
+): Promise<AudioRecording | undefined> {
+  const db = await getDb();
+  return db.get(RECORDING_STORE_NAME, id);
+}
+
 export async function clearSessions(): Promise<void> {
   const db = await getDb();
   const tx = db.transaction(

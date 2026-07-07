@@ -11,7 +11,7 @@ import {
 } from "@/components/motion";
 import { HistoryChart } from "@/components/HistoryChart";
 import { PageShell } from "@/components/Header";
-import { clearSessions, getAllSessions } from "@/lib/db";
+import { clearSessions, getAllSessions, getRecording } from "@/lib/db";
 import {
   getMetricFeedback,
   type FeedbackMetricKey,
@@ -38,6 +38,8 @@ const METRIC_GUIDE_KEYS = [
   "intonation",
 ] as const;
 
+type RecordingStatus = "idle" | "loading" | "ready" | "missing";
+
 export default function HistoryPage() {
   const t = useTranslations("history");
   const resultT = useTranslations("result");
@@ -58,6 +60,9 @@ export default function HistoryPage() {
   const [selectedSessionId, setSelectedSessionId] = useState<string | null>(
     null,
   );
+  const [recordingUrl, setRecordingUrl] = useState<string | null>(null);
+  const [recordingStatus, setRecordingStatus] =
+    useState<RecordingStatus>("idle");
 
   const selectedSession =
     sessions.find((session) => session.id === selectedSessionId) ?? null;
@@ -86,6 +91,52 @@ export default function HistoryPage() {
       setSelectedChartProfileId(currentProfileId);
     }
   }, [currentProfileId]);
+
+  useEffect(() => {
+    let cancelled = false;
+    let objectUrl: string | null = null;
+
+    setRecordingUrl(null);
+
+    if (!selectedSession) {
+      setRecordingStatus("idle");
+      return;
+    }
+
+    if (!selectedSession.audioRecordingId) {
+      setRecordingStatus("missing");
+      return;
+    }
+
+    setRecordingStatus("loading");
+
+    void getRecording(selectedSession.audioRecordingId)
+      .then((recording) => {
+        if (cancelled) return;
+
+        if (!recording) {
+          setRecordingStatus("missing");
+          return;
+        }
+
+        objectUrl = URL.createObjectURL(recording.blob);
+        setRecordingUrl(objectUrl);
+        setRecordingStatus("ready");
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setRecordingStatus("missing");
+        }
+      });
+
+    return () => {
+      cancelled = true;
+
+      if (objectUrl) {
+        URL.revokeObjectURL(objectUrl);
+      }
+    };
+  }, [selectedSession]);
 
   const handleClear = async () => {
     if (!window.confirm(t("confirmClear"))) return;
@@ -344,6 +395,29 @@ export default function HistoryPage() {
                   {selectedSession.scores.total}
                   {common("points")}
                 </span>
+              </div>
+
+              <div className="mt-4 rounded-xl border border-pink-100 bg-pink-50/60 p-3">
+                <h3 className="font-semibold text-pink-700">
+                  {t("recordingTitle")}
+                </h3>
+                {recordingStatus === "loading" ? (
+                  <p className="mt-2 text-sm text-slate-500">
+                    {t("recordingLoading")}
+                  </p>
+                ) : recordingUrl ? (
+                  <audio
+                    controls
+                    src={recordingUrl}
+                    className="mt-3 w-full"
+                  >
+                    {t("audioUnsupported")}
+                  </audio>
+                ) : (
+                  <p className="mt-2 text-sm text-slate-500">
+                    {t("recordingUnavailable")}
+                  </p>
+                )}
               </div>
 
               <div className="mt-4 grid gap-3">
