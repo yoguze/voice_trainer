@@ -1,15 +1,22 @@
 import type { MeasuredValues, Scores, VoiceTargets } from "@/types";
 
+const PERFECT_DEVIATION = 0.05;
+const MAX_DEVIATION = 0.4;
+
 export function scoreMetric(measured: number, target: number): number {
   if (target === 0) return 0;
+
   const deviation = Math.abs(measured - target) / target;
 
-  if (deviation <= 0.05) return 100;
-  if (deviation <= 0.1) return 80;
-  if (deviation <= 0.2) return 60;
-  if (deviation <= 0.3) return 40;
-  if (deviation <= 0.4) return 20;
-  return 0;
+  if (deviation <= PERFECT_DEVIATION) return 100;
+
+  const score =
+    100 *
+    (1 -
+      (deviation - PERFECT_DEVIATION) /
+        (MAX_DEVIATION - PERFECT_DEVIATION));
+
+  return Math.round(Math.max(0, Math.min(100, score)));
 }
 
 export function scoreStars(score: number): string {
