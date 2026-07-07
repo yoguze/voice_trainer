@@ -1,3 +1,5 @@
+import { detectPitch } from "@/lib/audio/pitch";
+
 function computeMagnitudeSpectrum(
   samples: Float32Array,
   fftSize: number,
@@ -77,38 +79,48 @@ export function computeSpectralCentroid(
   return weightedSum / magnitudeSum;
 }
 
+function computeFrameHNR(frame: Float32Array, period: number): number | null {
+  if (period <= 0 || frame.length <= period) return null;
+
+  let zeroLag = 0;
+  let correlation = 0;
+
+  for (let i = 0; i < frame.length - period; i++) {
+    zeroLag += frame[i] * frame[i];
+    correlation += frame[i] * frame[i + period];
+  }
+
+  if (zeroLag === 0) return null;
+
+  const normalizedCorrelation = correlation / zeroLag;
+  if (normalizedCorrelation <= 0) return null;
+
+  const r = Math.min(0.999, Math.max(0.001, normalizedCorrelation));
+  return 10 * Math.log10(r / (1 - r));
+}
+
 export function computeHNR(
   channelData: Float32Array,
   sampleRate: number,
+  frameSize = 2048,
+  hopSize = 1024,
 ): number {
-  const minPeriod = Math.floor(sampleRate / 500);
-  const maxPeriod = Math.ceil(sampleRate / 80);
+  const hnrValues: number[] = [];
 
-  let bestOffset = minPeriod;
-  let bestCorrelation = 0;
-  let zeroLagEnergy = 0;
+  for (let start = 0; start + frameSize <= channelData.length; start += hopSize) {
+    const frame = channelData.subarray(start, start + frameSize);
+    const pitch = detectPitch(frame, sampleRate);
+    if (pitch === null) continue;
 
-  for (let i = 0; i < channelData.length; i++) {
-    zeroLagEnergy += channelData[i] * channelData[i];
-  }
-
-  if (zeroLagEnergy === 0) return 0;
-
-  for (let offset = minPeriod; offset <= maxPeriod; offset++) {
-    let correlation = 0;
-    for (let i = 0; i < channelData.length - offset; i++) {
-      correlation += channelData[i] * channelData[i + offset];
-    }
-    if (correlation > bestCorrelation) {
-      bestCorrelation = correlation;
-      bestOffset = offset;
+    const period = Math.round(sampleRate / pitch);
+    const hnr = computeFrameHNR(frame, period);
+    if (hnr !== null && Number.isFinite(hnr)) {
+      hnrValues.push(hnr);
     }
   }
 
-  const harmonicEnergy = bestCorrelation / bestOffset;
-  const totalEnergy = zeroLagEnergy / channelData.length;
-  const noiseEnergy = Math.max(totalEnergy - harmonicEnergy, 1e-10);
+  if (hnrValues.length === 0) return 0;
 
-  const ratio = harmonicEnergy / noiseEnergy;
-  return 10 * Math.log10(Math.max(ratio, 1e-10));
+  const sum = hnrValues.reduce((acc, value) => acc + value, 0);
+  return sum / hnrValues.length;
 }
