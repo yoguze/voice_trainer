@@ -23,7 +23,7 @@ export type ChartMetricKey =
   | "intonation";
 
 type ChartDataPoint = {
-  date: string;
+  label: string;
   f0: number;
   f0Target: number;
   formantF1: number;
@@ -69,7 +69,11 @@ type HistoryChartProps = {
 
 type ChartTooltipProps = {
   active?: boolean;
-  payload?: Array<{ payload?: ChartDataPoint }>;
+  payload?: Array<{
+    dataKey?: string | number;
+    value?: number;
+    payload?: ChartDataPoint;
+  }>;
   label?: string;
   selectedMetric: ChartMetricKey;
   formatValue: (value: number) => string;
@@ -92,12 +96,24 @@ function ChartTooltip({
 }: ChartTooltipProps) {
   if (!active || !payload?.length) return null;
 
-  const point = payload[0]?.payload;
+  const config = METRIC_CONFIG[selectedMetric];
+  const measuredEntry = payload.find(
+    (entry) => entry.dataKey === selectedMetric,
+  );
+  const targetEntry = payload.find(
+    (entry) => entry.dataKey === config.targetKey,
+  );
+  const point = measuredEntry?.payload ?? payload[0]?.payload;
   if (!point) return null;
 
-  const config = METRIC_CONFIG[selectedMetric];
-  const measured = point[selectedMetric];
-  const target = point[config.targetKey] as number;
+  const measured =
+    typeof measuredEntry?.value === "number"
+      ? measuredEntry.value
+      : point[selectedMetric];
+  const target =
+    typeof targetEntry?.value === "number"
+      ? targetEntry.value
+      : (point[config.targetKey] as number);
   const diff = measured - target;
 
   return (
@@ -142,7 +158,12 @@ export function HistoryChart({ sessions }: HistoryChartProps) {
   const data = useMemo<ChartDataPoint[]>(
     () =>
       [...sessions].reverse().map((session) => ({
-        date: new Date(session.createdAt).toLocaleDateString(),
+        label: new Date(session.createdAt).toLocaleString(undefined, {
+          month: "numeric",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
         f0: session.measured.F0,
         f0Target: session.targets.F0,
         formantF1: session.measured.F1,
@@ -214,13 +235,14 @@ export function HistoryChart({ sessions }: HistoryChartProps) {
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data}>
             <CartesianGrid strokeDasharray="3 3" stroke="#fce7f3" />
-            <XAxis dataKey="date" tick={{ fontSize: 11 }} />
+            <XAxis dataKey="label" tick={{ fontSize: 11 }} />
             <YAxis
               domain={yDomain}
               tick={{ fontSize: 11 }}
               tickFormatter={(value) => `${Number(value).toFixed(0)}`}
             />
             <Tooltip
+              shared={false}
               content={
                 <ChartTooltip
                   selectedMetric={selectedMetric}
