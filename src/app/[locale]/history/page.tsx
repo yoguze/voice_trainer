@@ -32,7 +32,8 @@ import type {
 const METRIC_GUIDE_KEYS = [
   "total",
   "f0",
-  "formant",
+  "formantF1",
+  "formantF2",
   "spectralCentroid",
   "hnr",
   "intonation",
