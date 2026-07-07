@@ -14,10 +14,20 @@ const F0_TARGETS: Record<Level, number> = {
 };
 
 const FORMANT_TARGETS: Record<Level, { F1: number; F2: number }> = {
-  1: { F1: 680, F2: 1600 },
-  2: { F1: 720, F2: 1700 },
-  3: { F1: 780, F2: 1800 },
-  4: { F1: 850, F2: 2000 },
+  1: { F1: 650, F2: 1650 },
+  2: { F1: 600, F2: 1850 },
+  3: { F1: 560, F2: 2100 },
+  4: { F1: 470, F2: 2650 },
+};
+
+export const PROFILE_FORMANT_TARGETS: Record<
+  RecommendedVoiceProfileId,
+  { F1: number; F2: number }
+> = {
+  natural: { F1: 560, F2: 2100 },
+  soft: { F1: 640, F2: 1750 },
+  cute: { F1: 470, F2: 2650 },
+  cool: { F1: 500, F2: 2400 },
 };
 
 const SPECTRAL_CENTROID_TARGETS: Record<Level, number> = {
@@ -134,7 +144,11 @@ export function getRecommendedProfileIdForSelection(
 }
 
 export function buildVoiceTargets(selection: VoiceTypeSelection): VoiceTargets {
-  const formant = FORMANT_TARGETS[selection.pitchType];
+  const profileId = getRecommendedProfileIdForSelection(selection);
+  const formant =
+    profileId !== null
+      ? PROFILE_FORMANT_TARGETS[profileId]
+      : FORMANT_TARGETS[selection.pitchType];
 
   return {
     F0: F0_TARGETS[selection.pitchType],
@@ -143,6 +157,12 @@ export function buildVoiceTargets(selection: VoiceTypeSelection): VoiceTargets {
     HNR: HNR_TARGETS[selection.qualityType],
     intonation: INTONATION_TARGETS[selection.intonationType],
   };
+}
+
+export function getFormantReferenceProfileId(
+  selection: VoiceTypeSelection,
+): RecommendedVoiceProfileId | "custom" {
+  return getRecommendedProfileIdForSelection(selection) ?? "custom";
 }
 
 export const PITCH_LABELS = [

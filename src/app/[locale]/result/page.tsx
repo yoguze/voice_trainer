@@ -13,6 +13,7 @@ import {
   type FeedbackMetricKey,
 } from "@/lib/metric-feedback";
 import { scoreMetric } from "@/lib/scoring";
+import { getFormantReferenceProfileId } from "@/lib/targets";
 import {
   useLatestResult,
   useStoreHydrated,
@@ -35,6 +36,11 @@ export default function ResultPage() {
   if (!hasHydrated || !result) {
     return null;
   }
+
+  const formantReferenceProfileId = getFormantReferenceProfileId(
+    result.voiceType,
+  );
+  const formantReferenceNote = `${t("formantNote")} · ${t(`formantReferences.${formantReferenceProfileId}`)}`;
 
   const buildFeedbackComment = (
     metricKey: FeedbackMetricKey,
@@ -78,7 +84,7 @@ export default function ResultPage() {
       target: result.targets.formant.F1,
       score: scoreMetric(result.measured.F1, result.targets.formant.F1),
       unit: common("hz"),
-      note: t("formantNote"),
+      note: formantReferenceNote,
       description: t("metricDescriptions.formantF1"),
       improvement: t("metricTips.formant"),
       feedback: buildFeedbackComment(
@@ -94,7 +100,7 @@ export default function ResultPage() {
       target: result.targets.formant.F2,
       score: scoreMetric(result.measured.F2, result.targets.formant.F2),
       unit: common("hz"),
-      note: t("formantNote"),
+      note: formantReferenceNote,
       description: t("metricDescriptions.formantF2"),
       improvement: t("metricTips.formant"),
       feedback: buildFeedbackComment(

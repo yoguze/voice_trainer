@@ -421,6 +421,13 @@ export default function HistoryPage() {
                 )}
               </div>
 
+              <p className="mt-4 rounded-xl bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-800">
+                {resultT("formantNote")} ·{" "}
+                {resultT(
+                  `formantReferences.${getSessionProfileId(selectedSession)}`,
+                )}
+              </p>
+
               <div className="mt-4 grid gap-3">
                 {buildSessionMetrics(selectedSession).map((metric) => {
                   const signedTargetDiff =

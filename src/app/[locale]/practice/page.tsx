@@ -16,6 +16,7 @@ import {
 export default function PracticePage() {
   const t = useTranslations("practice");
   const phraseT = useTranslations("practicePhrases");
+  const resultT = useTranslations("result");
   const params = useParams<{ locale: string }>();
   const hasHydrated = useStoreHydrated();
   const voiceType = useVoiceTrainerStore((state) => state.voiceType);
@@ -46,6 +47,12 @@ export default function PracticePage() {
                 {phraseT(phraseId)}
               </p>
             </div>
+            <p className="mt-3 text-xs leading-5 text-slate-500">
+              {t("formantNotice")}
+            </p>
+            <p className="mt-1 text-xs leading-5 text-purple-600">
+              {resultT(`formantReferences.${phraseProfileId}`)}
+            </p>
           </motion.section>
 
           <Recorder locale={params.locale} promptPhraseId={phraseId} />

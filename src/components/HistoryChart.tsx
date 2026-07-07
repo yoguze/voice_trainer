@@ -172,6 +172,9 @@ export function HistoryChart({ sessions }: HistoryChartProps) {
     return `${signed}${unit}`;
   };
 
+  const isFormantMetric =
+    selectedMetric === "formantF1" || selectedMetric === "formantF2";
+
   return (
     <div className="space-y-4">
       <div>
@@ -197,6 +200,9 @@ export function HistoryChart({ sessions }: HistoryChartProps) {
             );
           })}
         </div>
+        {isFormantMetric ? (
+          <p className="text-xs leading-5 text-amber-700">{t("formantChartNotice")}</p>
+        ) : null}
       </div>
 
       <div className="h-72 w-full rounded-2xl border border-pink-100 bg-white p-4 shadow-sm">

@@ -74,6 +74,7 @@
     "subtitle": "Tap the mic button to record your voice",
     "phraseTitle": "Practice phrase",
     "phraseSubtitle": "Each voice type has a phrase set designed for more consistent comparison. Read both sentences continuously when recording.",
+    "formantNotice": "Formants are reference values. They change by vowel, so each profile target is based on a representative vowel from the literature.",
     "readPhrase": "Read this phrase set continuously",
     "recording": "Recording…",
     "tapToStart": "Tap to start recording",
@@ -105,7 +106,14 @@
     "f0": "F0 (pitch)",
     "formantF1": "Formant F1",
     "formantF2": "Formant F2",
-    "formantNote": "Reference only (browser FFT approximation)",
+    "formantNote": "Reference only · vowel-dependent (LPC approximation)",
+    "formantReferences": {
+      "natural": "Near /e/ (Hillenbrand 1995 female average)",
+      "soft": "Near /ɔ/ (female average)",
+      "cute": "Near /i/ (Hillenbrand 1995 female average)",
+      "cool": "Near /i/~/e/ (female average)",
+      "custom": "Reference vowel for the selected pitch range"
+    },
     "spectralCentroid": "Spectral centroid",
     "hnr": "HNR (breathiness)",
     "intonation": "Intonation",
@@ -115,8 +123,8 @@
     "feedbackLabel": "This attempt",
     "metricDescriptions": {
       "f0": "The center of your pitch. A higher score means your voice is staying close to the selected pitch range.",
-      "formantF1": "A lower resonance component affected by mouth opening and tongue position. It is a reference for how close your vowel shape is to the target.",
-      "formantF2": "A higher resonance component affected by tongue placement and oral resonance. It helps reflect brightness and vowel clarity.",
+      "formantF1": "A lower resonance component affected by mouth opening and tongue position. This reference value varies strongly by vowel.",
+      "formantF2": "A higher resonance component affected by tongue placement. Brighter, more front vowels tend to raise this reference value.",
       "spectralCentroid": "A measure of vocal brightness. Higher values tend to sound brighter, while lower values tend to sound calmer or darker.",
       "hnr": "The ratio between harmonic voice energy and noise. Higher values are measured as clearer, less breathy voice.",
       "intonation": "The pitch movement range during the recording. Larger values indicate more expression, while smaller values can sound flatter."
@@ -180,6 +188,7 @@
     "chartMetric": "Chart metric",
     "chartMeasured": "Measured",
     "chartTarget": "Target",
+    "formantChartNotice": "Formants are vowel-dependent reference values. The dashed line is a literature-based target for the selected profile.",
     "scoreUnit": " pts",
     "metrics": {
       "total": "Overall",
@@ -198,8 +207,8 @@
       "total": "A weighted score across all metrics. Start with the overall trend, then inspect which metric caused a drop.",
       "f0": "The center of your pitch. Use the chart to compare measured values against the target.",
       "formant": "A combined F1/F2 resonance score. Mouth opening, tongue position, and vowel shape are the main levers.",
-      "formantF1": "Lower resonance affected by mouth opening and tongue position. A larger gap from the target suggests room to adjust vowel shape.",
-      "formantF2": "Higher resonance affected by tongue placement. A larger gap from the target suggests room to adjust brightness or vowel clarity.",
+      "formantF1": "Lower resonance affected by mouth opening and tongue position. The target is a representative vowel reference.",
+      "formantF2": "Higher resonance affected by tongue placement. The target is a representative vowel reference.",
       "spectralCentroid": "Vocal brightness. Values below the target tend to sound darker; values above tend to sound brighter.",
       "hnr": "How little breathiness or noise is present. Values below the target suggest more breathiness.",
       "intonation": "Pitch movement across the phrase. Values below the target suggest a flatter delivery; values above suggest more movement."
