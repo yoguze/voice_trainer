@@ -16,6 +16,10 @@ export const metadata: Metadata = {
   title: "Voice Trainer",
   description: "Voice practice PWA",
   manifest: "/manifest.json",
+  icons: {
+    icon: [{ url: "/icons/icon.svg", type: "image/svg+xml" }],
+    apple: [{ url: "/icons/icon.svg", type: "image/svg+xml" }],
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
