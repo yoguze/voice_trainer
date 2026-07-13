@@ -17,8 +17,8 @@ export const metadata: Metadata = {
   description: "Voice practice PWA",
   manifest: "/manifest.json",
   icons: {
-    icon: [{ url: "/icons/icon.svg", type: "image/svg+xml" }],
-    apple: [{ url: "/icons/icon.svg", type: "image/svg+xml" }],
+    icon: [{ url: "/icons/icon.png", type: "image/png" }],
+    apple: [{ url: "/icons/icon.png", type: "image/png" }],
   },
   appleWebApp: {
     capable: true,
